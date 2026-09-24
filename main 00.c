@@ -6,6 +6,7 @@ void exibir_menu(void) {
     printf("\n=== CONTROLE DE ESTOQUE ===\n");
     printf("1 - Listar produtos\n");
     printf("2 - Exibir total em estoque (com tributos)\n");
+    printf("3 - Exibir total com desconto a vista\n");
     printf("0 - Sair\n");
     printf("Escolha uma opcao: ");
 }
@@ -13,7 +14,7 @@ void exibir_menu(void) {
 void listar_produtos(Produto lista[], int total) {
     printf("\n--- Produtos Cadastrados ---\n");
     for (int i = 0; i < total; i++) {
-        printf("ID: %d | Codigo de Barras: %s | Nome: %s | Preco: R$ %.2f | Qtd: %d\n", lista[i].id, lista[i].codigo_barras, lista[i].nome, lista[i].preco, lista[i].quantidade);
+        printf("ID: %d | Categoria: %s | Codigo de Barras: %s | Nome: %s | Preco: R$ %.2f | Qtd: %d\n\n", lista[i].id, lista[i].categoria, lista[i].codigo_barras, lista[i].nome, lista[i].preco, lista[i].quantidade);
     }
 }
 
@@ -25,17 +26,23 @@ float calcular_total(Produto lista[], int total) {
     return soma + soma * TAXA_PADRAO;
 }
 
+float aplicar_desconto(float total) {
+    return total - total * TAXA_DESCONTO;
+}
+
 int main(void) {
     Produto estoque[MAX_ITENS];
     int total_produtos = 2;
 
     estoque[0].id = 1;
+    strcpy(estoque[0].categoria, "Papelaria");
     strcpy(estoque[0].codigo_barras, "7890001");
     strcpy(estoque[0].nome, "Caderno");
     estoque[0].preco = 15.50;
     estoque[0].quantidade = 10;
 
     estoque[1].id = 2;
+    strcpy(estoque[1].categoria, "Escritorio");
     strcpy(estoque[1].codigo_barras, "7890002");
     strcpy(estoque[1].nome, "Caneta");
     estoque[1].preco = 3.00;
@@ -54,6 +61,9 @@ int main(void) {
                 break;
             case 2:
                 printf("\nTotal em estoque: R$ %.2f\n", calcular_total(estoque, total_produtos));
+                break;
+            case 3:
+                printf("\nTotal a vista (com desconto): R$ %.2f\n", aplicar_desconto(calcular_total(estoque, total_produtos)));
                 break;
             case 0:
                 printf("\nEncerrando o programa...\n");
